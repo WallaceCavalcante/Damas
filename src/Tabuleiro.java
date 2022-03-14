@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Tabuleiro {
 
     private static final String ALFABETO = "0ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public static String VEZ_JOGADOR = "";
 
     private String[][] matriz;
     private int tamanho;
@@ -70,7 +71,6 @@ public class Tabuleiro {
             for (int coluna = 0; coluna < tamanho ; coluna++) {
                 System.out.print(this.matriz[linha][coluna]);
             }
-
             System.out.println("");
         }
 
@@ -94,13 +94,6 @@ public class Tabuleiro {
             }
         }
         return peca;
-    }
-    // NAO DEU TEMPO DE MEXER/CONTINUAR
-    public void verificaMovimentoPeca(String peca,String coordenada){
-
-        if(peca.equals("B")){
-        }else if(peca.equals("P")){
-        }
     }
 
     // NAO DEU TEMPO DE MEXER/CONTINUAR
@@ -148,6 +141,19 @@ public class Tabuleiro {
         return coordenadaAnterior + "," + novaCoordenada;
     }
 
+    public String setaVezProximoJogador(String peca){
+
+        peca.toUpperCase();
+        if(peca.equals("B")){
+            System.out.println("Agora que a vez do jogador das pecas P:");
+            peca = "P";
+        }else{
+            System.out.println("Agora que a vez do jogador das pecas B:");
+            peca = "B";
+        }
+        return peca;
+    }
+
     // NAO DEU TEMPO DE MEXER/CONTINUAR
     public void moverPeca(String coordenadas) {
         Scanner scanner = new Scanner(System.in);
@@ -187,6 +193,7 @@ public class Tabuleiro {
         }
         this.matriz[novaLinha][novaColuna] = peca;
         imprimirTabuleiro();
+        VEZ_JOGADOR = setaVezProximoJogador(peca);
     }
 
     private int getLinha(String coordenada) {

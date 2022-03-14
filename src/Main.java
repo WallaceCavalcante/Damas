@@ -4,6 +4,8 @@ public class Main {
 
         tab.imprimirTabuleiro();
         tab.moverPeca(tab.pegaMovimentoPecas(tab.comecarGame()));
+        tab.moverPeca(tab.pegaMovimentoPecas(tab.VEZ_JOGADOR));
+
         // tab.moverPeca(tab.pegaMovimentoPecas());
 
         //tab.moverPeca("7A,6B");
