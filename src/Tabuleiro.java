@@ -1,13 +1,9 @@
-import java.util.Locale;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Tabuleiro {
 
-    // Letras para as colunas
     private static final String ALFABETO = "0ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    // Criando o Tabuleiro
     private String[][] matriz;
     private int tamanho;
 
@@ -99,7 +95,7 @@ public class Tabuleiro {
         }
         return peca;
     }
-
+    // NAO DEU TEMPO DE MEXER/CONTINUAR
     public void verificaMovimentoPeca(String peca,String coordenada){
 
         if(peca.equals("B")){
@@ -107,6 +103,7 @@ public class Tabuleiro {
         }
     }
 
+    // NAO DEU TEMPO DE MEXER/CONTINUAR
     public String pegaMovimentoPecas(String peca){
 
         int condicional = 0;
@@ -151,7 +148,7 @@ public class Tabuleiro {
         return coordenadaAnterior + "," + novaCoordenada;
     }
 
-
+    // NAO DEU TEMPO DE MEXER/CONTINUAR
     public void moverPeca(String coordenadas) {
         Scanner scanner = new Scanner(System.in);
         String[] vetorCoordenadas = coordenadas.split(",");
