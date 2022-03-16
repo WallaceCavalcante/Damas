@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Tabuleiro {
@@ -17,11 +20,11 @@ public class Tabuleiro {
 
         this.matriz[0][0] = "  ";
 
-        for(int coluna = 1; coluna < this.tamanho; coluna++) {
+        for (int coluna = 1; coluna < this.tamanho; coluna++) {
             this.matriz[0][coluna] = String.valueOf(ALFABETO.charAt(coluna));
         }
 
-        for(int linha = 1; linha < this.tamanho; linha++) {
+        for (int linha = 1; linha < this.tamanho; linha++) {
             String numeroDaLinha = "";
 
             numeroDaLinha += String.valueOf(linha) + " ";
@@ -67,8 +70,10 @@ public class Tabuleiro {
 
     public void imprimirTabuleiro() {
 
-        for (int linha = 0 ; linha < tamanho; linha++) {
-            for (int coluna = 0; coluna < tamanho ; coluna++) {
+        for (int linha = 0; linha < tamanho; linha++) {
+            System.out.print("    ");
+            for (int coluna = 0; coluna < tamanho; coluna++) {
+                System.out.print("  ");
                 System.out.print(this.matriz[linha][coluna]);
             }
             System.out.println("");
@@ -77,7 +82,7 @@ public class Tabuleiro {
         System.out.println("-----------------------------------");
     }
 
-    public String comecarGame(){
+    public String comecarGame() {
         String peca = "";
         int condicional = 0;
 
@@ -85,10 +90,10 @@ public class Tabuleiro {
         System.out.println("Quem irá começar o game? Insira valores como: P ou B");
         peca = sc.nextLine().toUpperCase();
 
-        while(condicional == 0){
-            if(peca.equals("B") || peca.equals("P")){
+        while (condicional == 0) {
+            if (peca.equals("B") || peca.equals("P")) {
                 condicional = 1;
-            }else{
+            } else {
                 System.out.println("Valor inválido, por favor informe valores como P ou B:");
                 peca = sc.nextLine().toUpperCase();
             }
@@ -97,23 +102,26 @@ public class Tabuleiro {
     }
 
     // NAO DEU TEMPO DE MEXER/CONTINUAR
-    public String pegaMovimentoPecas(String peca){
+    public String pegaMovimentoPecas(String peca) {
 
         int condicional = 0;
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Qual coordenada da peça que você gostaria de mover?");
         String coordenadaAnterior = scanner.nextLine().toUpperCase();
+        while (!coordenadaAnterior.matches("[1-9][A-H]")) {
+            System.out.println("Coordenada inválida, por favor digite no padrão correto (LinhaColuna)");
+            coordenadaAnterior = scanner.nextLine().toUpperCase();
+        }
 
-        while(condicional == 0){
+        while (condicional == 0) {
             int linha = getLinha(coordenadaAnterior);
             int coluna = getColuna(coordenadaAnterior);
 
-            if(!(peca.equals(this.matriz[linha][coluna]))){
+            if (!(peca.equals(this.matriz[linha][coluna]))) {
                 System.out.println("Por favor informe uma coordenada que seja sua peça, a peça: " + peca);
                 coordenadaAnterior = scanner.nextLine().toUpperCase();
-            }
-            else{
+            } else {
                 condicional = 1;
             }
         }
@@ -121,6 +129,10 @@ public class Tabuleiro {
 
         System.out.println("Para qual coordenada gostaria de mover a peça escolhida?");
         String novaCoordenada = scanner.nextLine().toUpperCase();
+        while (!novaCoordenada.matches("[1-9][A-H]")) {
+            System.out.println("Coordenada inválida, por favor digite no padrão correto (LinhaColuna)");
+            novaCoordenada = scanner.nextLine().toUpperCase();
+        }
 
         // VOLTAR E CONTINUAR ESSA PARTE AQUI FOI ONDE EU PAREI NA ULTIMA VEZ QUE MEXI, NA PARTE DA NOVACOORDENADA PARA FAZER ELA ANDAR SÓ NO RAIO DA PEÇA DELA
 
@@ -141,13 +153,13 @@ public class Tabuleiro {
         return coordenadaAnterior + "," + novaCoordenada;
     }
 
-    public String setaVezProximoJogador(String peca){
+    public String setaVezProximoJogador(String peca) {
 
         peca.toUpperCase();
-        if(peca.equals("B")){
+        if (peca.equals("B")) {
             System.out.println("Agora que a vez do jogador das pecas P:");
             peca = "P";
-        }else{
+        } else {
             System.out.println("Agora que a vez do jogador das pecas B:");
             peca = "B";
         }
@@ -170,37 +182,74 @@ public class Tabuleiro {
         this.matriz[linhaAnterior][colunaAnterior] = "*";
 
         int condicional = 0;
-        String pecaWhile="";
+        String pecaWhile = "";
 
         int novaLinha = getLinha(novaCoordenada);
         int novaColuna = getColuna(novaCoordenada);
-
-        while(condicional!=1) {
-            if ((novaLinha + novaColuna) % 2 != 0) {
+// validar se a linha anterior eh maior ou menor que a novaLinha, se for maior pegar linhaAnteior+1, se for menor linhaAnterior-1 o mesmo para coluna
+        while (condicional != 1) {
+            if ((novaLinha + novaColuna) % 2 != 0 ||
+                    linhaAnterior - novaLinha >= 2 || linhaAnterior - novaLinha <= -2
+                    || colunaAnterior - novaColuna >= 2 || colunaAnterior - novaColuna <= -2) {
                 System.out.println("Esta coordenada não é valida, por favor informe uma coordenada valida:");
                 pecaWhile = scanner.nextLine();
                 novaLinha = getLinha(pecaWhile);
                 novaColuna = getColuna(pecaWhile);
-            }
-         /*   else if (Objects.equals(this.matriz[novaLinha][novaColuna], peca)) {
-                System.out.println("Esta coordenada ja está preenchida, por favor informe uma coordenada valida:");
-                pecaWhile = scanner.nextLine();
-                novaLinha = getLinha(pecaWhile);
-                novaColuna = getColuna(pecaWhile);
-            } */else {
+            } else {
                 condicional = 1;
             }
         }
         this.matriz[novaLinha][novaColuna] = peca;
         imprimirTabuleiro();
         VEZ_JOGADOR = setaVezProximoJogador(peca);
+        validaPecaProxima(novaLinha, novaColuna);
+    }
+
+    private void validaPecaProxima(int novaLinha, int novaColuna) {
+        List<String> a = new ArrayList<>();
+        if (Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], "*")) {
+            if(Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], "*")){
+                a.add(String.valueOf(novaLinha - 1).concat(String.valueOf(novaColuna - 1)));
+                validaPecaProxima(novaLinha - 1, novaColuna - 1);
+            }
+
+        } else if (Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], "*")) {
+            validaPodeComer(novaLinha+1,novaColuna+1);
+            if(Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], "*")){
+                a.add(String.valueOf(novaLinha - 1).concat(String.valueOf(novaColuna + 1)));
+                validaPecaProxima(novaLinha - 1, novaColuna + 1);
+            }
+
+        } else if (Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], "*")) {
+            validaPodeComer(novaLinha+1,novaColuna+1);
+            if(Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], "*")){
+                a.add(String.valueOf(novaLinha + 1).concat(String.valueOf(novaColuna + 1)));
+                validaPecaProxima(novaLinha + 1, novaColuna + 1);
+            }
+
+        } else if (Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], "*")) {
+            validaPodeComer(novaLinha+1,novaColuna+1);
+            if(Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], "*")){
+                a.add(String.valueOf(novaLinha + 1).concat(String.valueOf(novaColuna - 1)));
+                validaPecaProxima(novaLinha + 1, novaColuna - 1);
+            }
+
+        } else {
+            System.out.println("NAO TEM PECA PROXIMA ");
+        }
+
+    }
+
+    private void validaPodeComer(int linha, int coluna) {
+
     }
 
     private int getLinha(String coordenada) {
-        return Integer.valueOf(coordenada.substring(0, 1));
+        return Integer.parseInt(String.valueOf(coordenada.charAt(0)));
     }
 
     private int getColuna(String coordenada) {
-        return ALFABETO.indexOf(coordenada.substring(1, 2));
+        return Character.getNumericValue(coordenada.charAt(1)) - 9;
     }
 }
+
