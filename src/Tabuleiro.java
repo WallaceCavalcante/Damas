@@ -207,37 +207,78 @@ public class Tabuleiro {
 
     private void validaPecaProxima(int novaLinha, int novaColuna) {
         List<String> a = new ArrayList<>();
-        if (Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], "*")) {
-            if(Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], "*")){
-                a.add(String.valueOf(novaLinha - 1).concat(String.valueOf(novaColuna - 1)));
-                validaPecaProxima(novaLinha - 1, novaColuna - 1);
-            }
+        if (novaLinha < 8 && novaColuna > 1 && novaLinha > 1 && novaColuna < 8) {
+            if (Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], "*")) {
+                if (Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], "*")) {
+                    a.add(String.valueOf(novaLinha - 1).concat(String.valueOf(novaColuna - 1)));
+                    validaCombo(novaLinha - 1, novaColuna - 1, a);
+                }
 
-        } else if (Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], "*")) {
-            validaPodeComer(novaLinha+1,novaColuna+1);
-            if(Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], "*")){
-                a.add(String.valueOf(novaLinha - 1).concat(String.valueOf(novaColuna + 1)));
-                validaPecaProxima(novaLinha - 1, novaColuna + 1);
             }
+            if (Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], "*")) {
+                if (Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], "*")) {
+                    a.add(String.valueOf(novaLinha - 1).concat(String.valueOf(novaColuna + 1)));
+                    validaPecaProxima(novaLinha - 1, novaColuna + 1);
+                }
 
-        } else if (Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], "*")) {
-            validaPodeComer(novaLinha+1,novaColuna+1);
-            if(Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], "*")){
-                a.add(String.valueOf(novaLinha + 1).concat(String.valueOf(novaColuna + 1)));
-                validaPecaProxima(novaLinha + 1, novaColuna + 1);
             }
+            else if (Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], "*")) {
+                if (Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], "*")) {
+                    a.add(String.valueOf(novaLinha + 1).concat(String.valueOf(novaColuna + 1)));
+                    validaPecaProxima(novaLinha + 1, novaColuna + 1);
+                }
 
-        } else if (Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], "*")) {
-            validaPodeComer(novaLinha+1,novaColuna+1);
-            if(Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], "*")){
-                a.add(String.valueOf(novaLinha + 1).concat(String.valueOf(novaColuna - 1)));
-                validaPecaProxima(novaLinha + 1, novaColuna - 1);
             }
-
-        } else {
-            System.out.println("NAO TEM PECA PROXIMA ");
+            else if (Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], "*")) {
+                if (Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], "*")) {
+                    a.add(String.valueOf(novaLinha + 1).concat(String.valueOf(novaColuna - 1)));
+                    validaPecaProxima(novaLinha + 1, novaColuna - 1);
+                }
+            }
         }
 
+        a.forEach(System.out::println);
+
+    }
+
+    private void validaCombo(int novaLinha, int novaColuna, List<String> listaDePosicao) {
+        if (novaLinha < 8 && novaColuna < 8) {
+            if (Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha + 1][novaColuna + 1], "*")) {
+                if (Objects.equals(this.matriz[novaLinha + 2][novaColuna + 2], "*")) {
+                    listaDePosicao.add(String.valueOf(novaLinha + 2).concat(String.valueOf(novaColuna + 2)));
+                    validaCombo(novaLinha + 2, novaColuna + 2, listaDePosicao);
+                }
+            }
+        }
+        if (novaLinha < 8 && novaColuna > 2) {
+            if (Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha + 1][novaColuna - 1], "*")) {
+                if (Objects.equals(this.matriz[novaLinha + 2][novaColuna - 2], "*")) {
+                    listaDePosicao.add(String.valueOf(novaLinha + 2).concat(String.valueOf(novaColuna - 2)));
+                    validaCombo(novaLinha + 2, novaColuna - 2, listaDePosicao);
+                }
+
+            }
+        }
+        if (novaLinha > 2 && novaColuna > 2) {
+            if (Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha - 1][novaColuna - 1], "*")) {
+                if (Objects.equals(this.matriz[novaLinha - 2][novaColuna - 2], "*")) {
+                    listaDePosicao.add(String.valueOf(novaLinha - 2).concat(String.valueOf(novaColuna - 2)));
+                    validaCombo(novaLinha - 2, novaLinha - 2, listaDePosicao);
+                }
+
+            }
+        }
+        if (novaLinha > 2 && novaColuna < 8) {
+            if (Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[novaLinha - 1][novaColuna + 1], "*")) {
+                if (Objects.equals(this.matriz[novaLinha - 2][novaColuna + 2], "*")) {
+                    listaDePosicao.add(String.valueOf(novaLinha - 2).concat(String.valueOf(novaColuna + 2)));
+                    validaCombo(novaLinha - 2, novaColuna + 2, listaDePosicao);
+                }
+
+            }
+        } else {
+            listaDePosicao.forEach(System.out::println);
+        }
     }
 
     private void validaPodeComer(int linha, int coluna) {
