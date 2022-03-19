@@ -377,10 +377,6 @@ public class Tabuleiro {
         return possiveisJogadas;
     }
 
-    //Para ele não somar o B que já foi comido, ele deve validar que não é a posição da peça que ele passou por cima
-    //Deve ser criada um int que soma a quantidade de peças comidas e ele deve ser zerado  no inicio do método
-    //para ser possivel pegar a diferença de quantidades que se pode comer e deve ser passado esse int por parametro
-    //para o método;
     private LinkedList<String> validaComePeca() {
 
         List<String> listaDePecaQuePodeComer = new ArrayList<>();
@@ -500,8 +496,9 @@ public class Tabuleiro {
                 }
             }
         }
-        listaDePosicaoParaComer.add("|");
-
+        if(!listaDePosicaoParaComer.get(listaDePosicaoParaComer.size()-1).equals("|")){
+            listaDePosicaoParaComer.add("|");
+        }
     }
 
     private void validaCombo(int novaLinha, int novaColuna, List<String> listaDePosicao) {
