@@ -41,7 +41,6 @@ public class Tabuleiro {
                 this.matriz[linha][coluna] = "*";
             }
         }
-
         matrizTeste();
     }
 
@@ -89,10 +88,9 @@ public class Tabuleiro {
 //        matriz[2][7] = "B";
 //        matriz[1][3] = "B";
 
-        matriz[6][2] = "𝓟";
-        matriz[3][5] = "B";
-        matriz[3][7] = "B";
-        matriz[6][6] = "B";
+        matriz[5][5] = "B";
+        matriz[6][6] = "P";
+        matriz[4][6] = "P";
     }
 
 
@@ -136,7 +134,6 @@ public class Tabuleiro {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Qual coordenada da peça que você gostaria de mover?");
-
 
         String coordenadaAnterior = scanner.nextLine().toUpperCase();
 
@@ -296,13 +293,24 @@ public class Tabuleiro {
         matriz[linhaAnterior][colunaAnterior] = "*";
         matriz[novaLinha][novaColuna] = peca;
 
-        if (listaValidaComePeca.size() <= 2 && listaDeValidaDamaComePeca.size() <= 2) {
-            if (VEZ_JOGADOR.equals("P") && novaLinha == 1) {
-                matriz[novaLinha][novaColuna] = "𝓟";
-            } else if (VEZ_JOGADOR.equals("B") && novaLinha == 8) {
-                matriz[novaLinha][novaColuna] = "𝓑";
+        if(listaDasPecasObrigadoComer.size()> 1 || listaDasDamasObrigadoComer.size()> 1){
+            if (listaValidaComePeca.size() <= (listaDasPecasObrigadoComer.size() + 1) && listaDeValidaDamaComePeca.size() <= (listaDasDamasObrigadoComer.size()+1)) {
+                if (VEZ_JOGADOR.equals("P") && novaLinha == 1) {
+                    matriz[novaLinha][novaColuna] = "𝓟";
+                } else if (VEZ_JOGADOR.equals("B") && novaLinha == 8) {
+                    matriz[novaLinha][novaColuna] = "𝓑";
+                }
+                VEZ_JOGADOR = setaVezProximoJogador(peca);
             }
-            VEZ_JOGADOR = setaVezProximoJogador(peca);
+        } else{
+            if (listaValidaComePeca.size() <= 1 && listaDeValidaDamaComePeca.size() <= 1) {
+                if (VEZ_JOGADOR.equals("P") && novaLinha == 1) {
+                    matriz[novaLinha][novaColuna] = "𝓟";
+                } else if (VEZ_JOGADOR.equals("B") && novaLinha == 8) {
+                    matriz[novaLinha][novaColuna] = "𝓑";
+                }
+                VEZ_JOGADOR = setaVezProximoJogador(peca);
+            }
         }
         imprimirTabuleiro();
         //validaPecaProxima(novaLinha, novaColuna);
@@ -380,16 +388,7 @@ public class Tabuleiro {
     private List<String> validaJogadasDisponiveisDaPeca(int linha, int coluna) {
         List<String> possiveisJogadas = new ArrayList<>();
 
-        if (linha < 8 && coluna < 8) {
-            if (Objects.equals(this.matriz[linha + 1][coluna + 1], "*")) {
-                possiveisJogadas.add(String.valueOf(linha + 1).concat(String.valueOf(matriz[0][coluna + 1])));
-            }
-        }
-        if (linha < 8 && coluna > 1) {
-            if (Objects.equals(this.matriz[linha + 1][coluna - 1], "*")) {
-                possiveisJogadas.add(String.valueOf(linha + 1).concat(String.valueOf(matriz[0][coluna - 1])));
-            }
-        }
+    if(VEZ_JOGADOR.equals("P")){
         if (linha > 1 && coluna > 1) {
             if (Objects.equals(this.matriz[linha - 1][coluna - 1], "*")) {
                 possiveisJogadas.add(String.valueOf(linha - 1).concat(String.valueOf(matriz[0][coluna - 1])));
@@ -400,6 +399,19 @@ public class Tabuleiro {
                 possiveisJogadas.add(String.valueOf(linha - 1).concat(String.valueOf(matriz[0][coluna + 1])));
             }
         }
+    }else{
+        if (linha < 8 && coluna < 8) {
+            if (Objects.equals(this.matriz[linha + 1][coluna + 1], "*")) {
+                possiveisJogadas.add(String.valueOf(linha + 1).concat(String.valueOf(matriz[0][coluna + 1])));
+            }
+        }
+        if (linha < 8 && coluna > 1) {
+            if (Objects.equals(this.matriz[linha + 1][coluna - 1], "*")) {
+                possiveisJogadas.add(String.valueOf(linha + 1).concat(String.valueOf(matriz[0][coluna - 1])));
+            }
+        }
+    }
+
         possiveisJogadas.forEach(a -> System.out.print(a + ", "));
         System.out.println();
         return possiveisJogadas;
@@ -721,7 +733,6 @@ public class Tabuleiro {
             if (!Objects.equals(matriz[l][c], dama) && !Objects.equals(matriz[l][c], VEZ_JOGADOR) && !Objects.equals(matriz[l][c], "*")) {
                 if (!listaPecasComidasPelaDama.contains(String.valueOf(l).concat(matriz[0][c]))) {
                     if (Objects.equals(matriz[l + 1][c + 1], "*")) {
-                        listaDasDamasObrigadoComer.add(String.valueOf(linha).concat(String.valueOf(matriz[0][coluna])));
                         listaPecasComidasPelaDama.add(String.valueOf(l).concat(String.valueOf(matriz[0][c])));
                         listaDePosicaoParaComer.add(String.valueOf(l + 1).concat(String.valueOf(matriz[0][c + 1])));
                         validaComePecaDama(String.valueOf(l + 1).concat(String.valueOf(matriz[0][c + 1])), listaDePosicaoParaComer);
@@ -737,7 +748,6 @@ public class Tabuleiro {
             if (!Objects.equals(matriz[l][c], dama) && !Objects.equals(matriz[l][c], VEZ_JOGADOR) && !Objects.equals(matriz[l][c], "*")) {
                 if (!listaPecasComidasPelaDama.contains(String.valueOf(l).concat(matriz[0][c]))) {
                     if (Objects.equals(matriz[l + 1][c - 1], "*")) {
-                        listaDasDamasObrigadoComer.add(String.valueOf(linha).concat(String.valueOf(matriz[0][coluna])));
                         listaPecasComidasPelaDama.add(String.valueOf(l).concat(String.valueOf(matriz[0][c])));
                         listaDePosicaoParaComer.add(String.valueOf(l + 1).concat(String.valueOf(matriz[0][c - 1])));
                         validaComePecaDama(String.valueOf(l + 1).concat(String.valueOf(matriz[0][c - 1])), listaDePosicaoParaComer);
@@ -753,7 +763,6 @@ public class Tabuleiro {
             if (!Objects.equals(matriz[l][c], dama) && !Objects.equals(matriz[l][c], VEZ_JOGADOR) && !Objects.equals(matriz[l][c], "*")) {
                 if (!listaPecasComidasPelaDama.contains(String.valueOf(l).concat(matriz[0][c]))) {
                     if (Objects.equals(matriz[l - 1][c - 1], "*")) {
-                        listaDasDamasObrigadoComer.add(String.valueOf(linha).concat(String.valueOf(matriz[0][coluna])));
                         listaPecasComidasPelaDama.add(String.valueOf(l).concat(String.valueOf(matriz[0][c])));
                         listaDePosicaoParaComer.add(String.valueOf(l - 1).concat(String.valueOf(matriz[0][c - 1])));
                         validaComePecaDama(String.valueOf(l - 1).concat(String.valueOf(matriz[0][c - 1])), listaDePosicaoParaComer);
@@ -769,7 +778,6 @@ public class Tabuleiro {
             if (!Objects.equals(matriz[l][c], dama) && !Objects.equals(matriz[l][c], VEZ_JOGADOR) && !Objects.equals(matriz[l][c], "*")) {
                 if (!listaPecasComidasPelaDama.contains(String.valueOf(l).concat(matriz[0][c]))) {
                     if (Objects.equals(matriz[l - 1][c + 1], "*")) {
-                        listaDasDamasObrigadoComer.add(String.valueOf(linha).concat(String.valueOf(matriz[0][coluna])));
                         listaPecasComidasPelaDama.add(String.valueOf(l).concat(String.valueOf(matriz[0][c])));
                         listaDePosicaoParaComer.add(String.valueOf(l - 1).concat(String.valueOf(matriz[0][c + 1])));
                         validaComePecaDama(String.valueOf(l - 1).concat(String.valueOf(matriz[0][c + 1])), listaDePosicaoParaComer);
