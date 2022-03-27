@@ -1,9 +1,10 @@
 public class Main {
+    public static boolean vencedor = false;
+
     public static void main(String[] args) {
         Tabuleiro tab = new Tabuleiro(8);
         tab.imprimirTabuleiro();
         tab.moverPeca(tab.pegaMovimentoPecas(tab.comecarGame()));
-        boolean vencedor = false;
         while(!vencedor){
             int b = 0;
             int p = 0;
