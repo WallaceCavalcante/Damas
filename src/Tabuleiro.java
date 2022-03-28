@@ -41,7 +41,7 @@ public class Tabuleiro {
                 this.matriz[linha][coluna] = "*";
             }
         }
-        matrizDefault();
+        matrizTeste();
     }
 
     public void matrizDefault() {
@@ -78,11 +78,11 @@ public class Tabuleiro {
 
     public void matrizTeste() {
 
-        matriz[3][3] = "𝓟";
-        matriz[8][2] = "𝓑";
-//        matriz[7][7] = "P";
-//        matriz[7][7] = "B";
-        matriz[5][5] = "B";
+        matriz[5][1] = "P";
+        matriz[4][2] = "𝓑";
+        matriz[7][7] = "P";
+        matriz[2][4] = "B";
+        matriz[4][6] = "B";
     }
 
 
@@ -149,6 +149,7 @@ public class Tabuleiro {
             } else if (listaValidaComePeca.size() == listaDeValidaDamaComePeca.size()) {
                 System.out.println("Você é obrigado a comer, escolha a peça: ");
                 listaDasPecasObrigadoComer.forEach(a -> System.out.print(a + ", "));
+                listaDasDamasObrigadoComer.forEach(a -> System.out.print(a + ", "));
                 System.out.println();
                 while (!listaDasPecasObrigadoComer.contains(coordenadaAnterior) && !coordenadaAnterior.equals("") &&
                         !listaDasDamasObrigadoComer.contains(coordenadaAnterior)) {
@@ -327,7 +328,7 @@ public class Tabuleiro {
                 VEZ_JOGADOR = setaVezProximoJogador(peca);
             }
         } else {
-            if (listaValidaComePeca.size() < 1 && listaPecasComidasPelaDama.size() < 1) {
+            if (listaValidaComePeca.size() <= 1 && listaPecasComidasPelaDama.size() < 1) {
                 if (VEZ_JOGADOR.equals("P") && novaLinha == 1) {
                     matriz[novaLinha][novaColuna] = "𝓟";
                 } else if (VEZ_JOGADOR.equals("B") && novaLinha == 8) {
@@ -376,13 +377,19 @@ public class Tabuleiro {
     }
 
     private LinkedList<String> validaComePeca() {
-
         LinkedList<String> listaDePosicaoParaComer = new LinkedList<>();
+
+        String dama = "";
+        if (VEZ_JOGADOR.equals("P")) {
+            dama = "𝓟";
+        } else if (VEZ_JOGADOR.equals("B")) {
+            dama = "𝓑";
+        }
 
         for (int linha = 1; linha < tamanho; linha++) {
             for (int coluna = 1; coluna < tamanho; coluna++) {
                 if (linha < 7 && coluna < 7) {
-                    if (Objects.equals(this.matriz[linha][coluna], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna + 1], "*")) {
+                    if (Objects.equals(this.matriz[linha][coluna], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna + 1], dama) && !Objects.equals(this.matriz[linha + 1][coluna + 1], "*")) {
                         if (Objects.equals(this.matriz[linha + 2][coluna + 2], "*")) {
                             listaPecasComidas.add(String.valueOf(linha + 1).concat(matriz[0][coluna + 1]));
                             listaDasPecasObrigadoComer.add(String.valueOf(linha).concat(matriz[0][coluna]));
@@ -391,7 +398,7 @@ public class Tabuleiro {
                     }
                 }
                 if (linha < 7 && coluna > 2) {
-                    if (Objects.equals(this.matriz[linha][coluna], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna - 1], "*")) {
+                    if (Objects.equals(this.matriz[linha][coluna], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna - 1], dama) && !Objects.equals(this.matriz[linha + 1][coluna - 1], "*")) {
                         if (Objects.equals(this.matriz[linha + 2][coluna - 2], "*")) {
                             listaPecasComidas.add(String.valueOf(linha + 1).concat(matriz[0][coluna - 1]));
                             listaDasPecasObrigadoComer.add(String.valueOf(linha).concat(matriz[0][coluna]));
@@ -401,7 +408,7 @@ public class Tabuleiro {
                     }
                 }
                 if (linha > 2 && coluna > 2) {
-                    if (Objects.equals(this.matriz[linha][coluna], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna - 1], "*")) {
+                    if (Objects.equals(this.matriz[linha][coluna], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna - 1], dama) && !Objects.equals(this.matriz[linha - 1][coluna - 1], "*")) {
                         if (Objects.equals(this.matriz[linha - 2][coluna - 2], "*")) {
                             listaPecasComidas.add(String.valueOf(linha - 1).concat(matriz[0][coluna - 1]));
                             listaDasPecasObrigadoComer.add(String.valueOf(linha).concat(matriz[0][coluna]));
@@ -411,7 +418,7 @@ public class Tabuleiro {
                     }
                 }
                 if (linha > 2 && coluna < 7) {
-                    if (Objects.equals(this.matriz[linha][coluna], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna + 1], "*")) {
+                    if (Objects.equals(this.matriz[linha][coluna], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna + 1], dama) && !Objects.equals(this.matriz[linha - 1][coluna + 1], "*")) {
                         if (Objects.equals(this.matriz[linha - 2][coluna + 2], "*")) {
                             listaPecasComidas.add(String.valueOf(linha - 1).concat(matriz[0][coluna + 1]));
                             listaDasPecasObrigadoComer.add(String.valueOf(linha).concat(matriz[0][coluna]));
@@ -463,9 +470,16 @@ public class Tabuleiro {
         int linha = getLinha(coordenada);
         int coluna = getColuna(coordenada);
 
+        String dama = "";
+        if (VEZ_JOGADOR.equals("P")) {
+            dama = "𝓟";
+        } else if (VEZ_JOGADOR.equals("B")) {
+            dama = "𝓑";
+        }
+
         if (linha < 7 && coluna < 7) {
 
-            if (!Objects.equals(this.matriz[linha + 1][coluna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna + 1], "*")) {
+            if (!Objects.equals(this.matriz[linha + 1][coluna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna + 1], dama) && !Objects.equals(this.matriz[linha + 1][coluna + 1], "*")) {
                 if (Objects.equals(this.matriz[linha + 2][coluna + 2], "*")) {
                     if (!listaPecasComidas.contains(String.valueOf(linha + 1).concat(matriz[0][coluna + 1]))) {
                         listaPecasComidas.add(String.valueOf(linha + 1).concat(matriz[0][coluna + 1]));
@@ -484,7 +498,7 @@ public class Tabuleiro {
             }
         }
         if (linha < 7 && coluna > 2) {
-            if (!Objects.equals(this.matriz[linha + 1][coluna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna - 1], "*")) {
+            if (!Objects.equals(this.matriz[linha + 1][coluna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha + 1][coluna - 1], dama) && !Objects.equals(this.matriz[linha + 1][coluna - 1], "*")) {
                 if (Objects.equals(this.matriz[linha + 2][coluna - 2], "*")) {
                     if (!listaPecasComidas.contains(String.valueOf(linha + 1).concat(matriz[0][coluna - 1]))) {
                         listaPecasComidas.add(String.valueOf(linha + 1).concat(matriz[0][coluna - 1]));
@@ -503,7 +517,7 @@ public class Tabuleiro {
             }
         }
         if (linha > 2 && coluna > 2) {
-            if (!Objects.equals(this.matriz[linha - 1][coluna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna - 1], "*")) {
+            if (!Objects.equals(this.matriz[linha - 1][coluna - 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna - 1], dama) && !Objects.equals(this.matriz[linha - 1][coluna - 1], "*")) {
                 if (Objects.equals(this.matriz[linha - 2][coluna - 2], "*")) {
                     if (!listaPecasComidas.contains(String.valueOf(linha - 1).concat(matriz[0][coluna - 1]))) {
                         listaPecasComidas.add(String.valueOf(linha - 1).concat(matriz[0][coluna - 1]));
@@ -522,7 +536,7 @@ public class Tabuleiro {
             }
         }
         if (linha > 2 && coluna < 7) {
-            if (!Objects.equals(this.matriz[linha - 1][coluna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna + 1], "*")) {
+            if (!Objects.equals(this.matriz[linha - 1][coluna + 1], VEZ_JOGADOR) && !Objects.equals(this.matriz[linha - 1][coluna + 1], dama) && !Objects.equals(this.matriz[linha - 1][coluna + 1], "*")) {
                 if (Objects.equals(this.matriz[linha - 2][coluna + 2], "*")) {
                     if (!listaPecasComidas.contains(String.valueOf(linha - 1).concat(matriz[0][coluna + 1]))) {
                         listaPecasComidas.add(String.valueOf(linha - 1).concat(matriz[0][coluna + 1]));
@@ -606,8 +620,8 @@ public class Tabuleiro {
 
     private LinkedList<String> validaComePecaDama() {
         LinkedList<String> listaDePosicaoParaComer = new LinkedList<>();
-        String dama = "";
 
+        String dama = "";
         if (VEZ_JOGADOR.equals("P")) {
             dama = "𝓟";
         } else if (VEZ_JOGADOR.equals("B")) {
