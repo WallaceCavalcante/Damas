@@ -44,6 +44,7 @@ public class Tabuleiro {
                 matriz[linha][coluna] = "*";
             }
         }
+        //preenche as peças do tabuleiro(B e P)
         matrizDefault();
     }
 
@@ -82,12 +83,11 @@ public class Tabuleiro {
 
     public void matrizTeste() {
 
-        matriz[6][2] = "𝓟";
-        matriz[7][7] = "𝓟";
-        matriz[7][5] = "B";
-        matriz[6][8] = "B";
-        matriz[2][2] = "B";
-        matriz[4][4] = "B";
+        matriz[7][3] = "B";
+        matriz[8][2] = "P";
+        matriz[5][5] = "B";
+        matriz[5][3] = "B";
+        matriz[3][7] = "B";
     }
 
 
@@ -267,6 +267,8 @@ public class Tabuleiro {
             }
             //caso ele for obrigado a comer alguma peça ele cai aqui
         } else {
+            //zera o contador
+            contadorMovimentoDamaSemComerNada = 0;
             //valida se a peça não é uma dama
             if (!matriz[getLinha(coordenadaAnterior)][getColuna(coordenadaAnterior)].equals(atualDama)) {
                 System.out.println("Você pode mover a sua peça para a posição abaixo: ");
@@ -602,6 +604,9 @@ public class Tabuleiro {
                     listaDePosicaoParaComerAux = listaDePosicaoParaComer;
                     listaPecasComidasAuxSP = listaPecasComidas;
                     //seta a peça que tem o maior caminho
+                    listaDePecaObrigadoAComerAuxSP.addAll(listaDasPecasObrigadoComer);
+                    //caso ambas as peças que são obrigadas a comer possam comer a mesma quantidade de peça, o jogador pode selecionar qual ele irá utilizar
+                }else if(listaDePosicaoParaComer.size() == tamanhoLista){
                     listaDePecaObrigadoAComerAuxSP.addAll(listaDasPecasObrigadoComer);
                 }
             }
